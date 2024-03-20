@@ -6,13 +6,21 @@ namespace TestODataWithEf.DotNet6.Context
     public class FakeContext
         : DbContext
     {
+        private readonly ILogger<FakeContext> _logger;
+
         public DbSet<FakeModel> Fakes { get; set; } = null!;
+
+        public FakeContext(ILogger<FakeContext> logger)
+        {
+            _logger = logger;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
 
             optionsBuilder.UseInMemoryDatabase("fake-database");
+            optionsBuilder.AddInterceptors(new BlockNonAsyncQueriesInterceptor(_logger));
         }
 
         public static async Task PopulateAsync(

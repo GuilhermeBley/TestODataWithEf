@@ -22,7 +22,7 @@ public class FakeController : ControllerBase
     }
 
     [EnableQuery]
-    [HttpGet]
+    [HttpGet("enable-query")]
     public ActionResult<IQueryable<FakeModel>> Get()
     {
         return Ok(
