@@ -15,6 +15,8 @@ builder.Services.AddDbContext<FakeContext>();
 
 var app = builder.Build();
 
+await FakeContext.PopulateAsync(app.Services);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -28,4 +30,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
