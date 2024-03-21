@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.OData;
+using TestODataWithEf.DotNet6;
 using TestODataWithEf.DotNet6.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<FakeContext>();
+
+builder.Services.Configure<MySqlContextConfig>(
+    builder.Configuration.GetSection(MySqlContextConfig.SECTION));
 
 var app = builder.Build();
 

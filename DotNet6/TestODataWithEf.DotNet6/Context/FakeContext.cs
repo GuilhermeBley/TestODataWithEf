@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using TestODataWithEf.DotNet6.Model;
 
 namespace TestODataWithEf.DotNet6.Context
@@ -7,19 +8,24 @@ namespace TestODataWithEf.DotNet6.Context
         : DbContext
     {
         private readonly ILogger<FakeContext> _logger;
+        private readonly IOptions<MySqlContextConfig> _options;
 
         public DbSet<FakeModel> Fakes { get; set; } = null!;
 
-        public FakeContext(ILogger<FakeContext> logger)
+        public FakeContext(
+            ILogger<FakeContext> logger,
+            IOptions<MySqlContextConfig> options)
         {
             _logger = logger;
+            _options = options;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseInMemoryDatabase("fake-database");
+            optionsBuilder.UseMySql(
+                ServerVersion.AutoDetect(_options.Value.ConnectionString));
             optionsBuilder.AddInterceptors(new BlockNonAsyncQueriesInterceptor(_logger));
         }
 
