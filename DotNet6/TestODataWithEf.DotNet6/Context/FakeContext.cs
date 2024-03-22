@@ -38,6 +38,9 @@ namespace TestODataWithEf.DotNet6.Context
 
             var context = scope.ServiceProvider.GetRequiredService<FakeContext>();
 
+            if (await context.Fakes.AnyAsync())
+                return;
+
             foreach(var index in Enumerable.Range(0, 100))
             {
                 await context.Fakes.AddAsync(new());
