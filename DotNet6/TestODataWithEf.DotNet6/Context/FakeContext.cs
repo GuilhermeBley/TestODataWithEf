@@ -25,7 +25,9 @@ namespace TestODataWithEf.DotNet6.Context
             base.OnConfiguring(optionsBuilder);
 
             optionsBuilder.UseMySql(
+                _options.Value.ConnectionString, 
                 ServerVersion.AutoDetect(_options.Value.ConnectionString));
+
             optionsBuilder.AddInterceptors(new BlockNonAsyncQueriesInterceptor(_logger));
         }
 
